@@ -221,9 +221,14 @@ class TensorflowModel(ModelInterface):
 
                 yield i / 255.0, l, [len(i)], [len(l)], [json.dumps(d)]
 
-        dataset = tf.data.Dataset.from_generator(gen, (tf.float32, tf.int32, tf.int32, tf.int32, tf.string))
+        dataset = tf.data.Dataset.from_generator(gen, (tf.float32, tf.int32, tf.int32, tf.int32, tf.string),
+                          (tf.TensorShape((None, line_height, self.input_channels),),
+                           tf.TensorShape((None,)),
+                           tf.TensorShape((1,)),
+                           tf.TensorShape((1,)),
+                           tf.TensorShape((1,))))
         if mode == "train":
-            dataset = dataset.repeat().shuffle(buffer_size, seed=self.network_proto.backend.random_seed)
+            dataset = dataset.shuffle(buffer_size, seed=self.network_proto.backend.random_seed, reshuffle_each_iteration=True)
         else:
             pass
 
@@ -233,7 +238,7 @@ class TensorflowModel(ModelInterface):
         def group(data, targets, len_data, len_labels, user_data):
             return (
                 {"input_data": data, "input_sequence_length": len_data, "input_data_params": user_data, "targets": targets, "targets_length": len_labels},
-                {'ctc': np.zeros([batch_size]), 'cer_acc': np.zeros([batch_size])}
+                {'ctc': np.zeros([batch_size])}
             )
 
         return dataset.prefetch(5).map(group)
