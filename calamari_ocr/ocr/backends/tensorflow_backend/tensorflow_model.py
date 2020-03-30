@@ -228,7 +228,7 @@ class TensorflowModel(ModelInterface):
                            tf.TensorShape((1,)),
                            tf.TensorShape((1,))))
         if mode == "train":
-            dataset = dataset.shuffle(buffer_size, seed=self.network_proto.backend.random_seed, reshuffle_each_iteration=True)
+            dataset = dataset.repeat().shuffle(buffer_size, seed=self.network_proto.backend.random_seed, reshuffle_each_iteration=True)
         else:
             pass
 
