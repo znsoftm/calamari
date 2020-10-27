@@ -12,6 +12,11 @@ from tensorflow.python.ops import ctc_ops as ctc
 from .callbacks.visualize import VisCallback
 from .callbacks.earlystopping import EarlyStoppingCallback
 
+try:
+    from adabelief_tf import AdaBeliefOptimizer
+except ImportError:
+    AdaBeliefOptimizer = None
+
 keras = tf.keras
 K = keras.backend
 KL = keras.layers
@@ -260,6 +265,11 @@ class TensorflowModel(ModelInterface):
             optimizer = keras.optimizers.SGD(self.network_proto.learning_rate, self.network_proto.momentum, clipnorm=self.network_proto.clipping_norm)
         elif self.network_proto.solver == NetworkParams.ADAM_SOLVER:
             optimizer = keras.optimizers.Adam(self.network_proto.learning_rate, clipnorm=self.network_proto.clipping_norm)
+        elif self.network_proto.solver == NetworkParams.ADABELIEF_SOLVER:
+            if AdaBeliefOptimizer == None:
+                raise Exception("AdaBeliefOptimizer needs to be installed!")
+            else:
+                optimizer = AdaBeliefOptimizer(self.network_proto.learning_rate, clipnorm=self.network_proto.clipping_norm)
         else:
             raise Exception("Unknown solver of type '%s'" % self.network_proto.solver)
 

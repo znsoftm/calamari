@@ -106,6 +106,7 @@ message NetworkParams {
     enum SolverType {
         MOMENTUM_SOLVER = 0;
         ADAM_SOLVER = 1;
+        ADABELIEF_SOLVER = 2;
     }
 
     BackendParams backend = 8;

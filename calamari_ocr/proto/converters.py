@@ -41,7 +41,8 @@ def network_params_from_definition_string(str, params):
             setattr(params, label, float(value))
         elif label == "solver":
             params.solver = {"momentum": NetworkParams.MOMENTUM_SOLVER,
-                             "adam": NetworkParams.ADAM_SOLVER}[value.lower()]
+                             "adam": NetworkParams.ADAM_SOLVER,
+                             "adabelief": NetworkParams.ADABELIEF_SOLVER}[value.lower()]
         elif label == "lstm":
             lstm_appeared = True
             layer = params.layers.add()
