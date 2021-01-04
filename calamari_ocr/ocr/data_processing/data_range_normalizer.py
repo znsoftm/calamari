@@ -19,7 +19,7 @@ class DataRangeNormalizer(DataPreprocessor):
         if data.dtype == np.dtype('int8'):
             data = data / 127.0
         elif data.dtype == np.dtype('uint16'):
-            data = data / 65536.0
+            data = data / 65535.0
         elif data.dtype == np.dtype('int16'):
             data = data / 32767.0
         elif data.dtype == np.dtype('uint32'):
