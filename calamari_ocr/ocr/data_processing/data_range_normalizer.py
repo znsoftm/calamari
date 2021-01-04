@@ -22,6 +22,14 @@ class DataRangeNormalizer(DataPreprocessor):
             data = data / 65536.0
         elif data.dtype == np.dtype('int16'):
             data = data / 32767.0
+        elif data.dtype == np.dtype('uint32'):
+            data = data / 4_294_967_295.0
+        elif data.dtype == np.dtype('int32'):
+            data = data / 2_147_483_647.0
+        elif data.dtype == np.dtype('uint64'):
+            data = data / 18_446_744_073_709_551_615.0
+        elif data.dtype == np.dtype('int64'):
+            data = data / 9_223_372_036_854_775_807.0
         elif data.dtype in [np.dtype('f'), np.dtype('float32'), np.dtype('float64')]:
             pass
         elif data.dtype == bool:
